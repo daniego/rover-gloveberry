@@ -24,7 +24,7 @@
 #define DIGITAL_IN_PIN                    A4
 #define PWM_PIN                           D3s
 #define SERVO_PIN                         D5
-#define ANALOG_IN_PIN                     A5
+#define ANALOG_IN_PIN                     A3
 #endif
 
 #ifdef BLE_NANO

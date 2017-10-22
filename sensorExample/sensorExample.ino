@@ -23,7 +23,7 @@
 //define sensor pin
 //#define SENSOR_PIN 5
 #define SENSOR_PIN A3
-
+#define SENSOR_PIN2 A4
 //variable for a timer
 long previousMillis = 0;
 
@@ -34,10 +34,13 @@ long interval = 100;
 BLEPeripheral           blePeripheral        = BLEPeripheral(BLE_REQ, BLE_RDY, BLE_RST);
 
 // service for pin A3
-BLEService              sensorService           = BLEService("19b10000e8f2537e4f6cd104768a1214");
-// create switch characteristic for pin A3
-BLECharCharacteristic   sensorCharacteristic = BLECharCharacteristic("19b10001e8f2537e4f6cd104768a1214", BLERead | BLENotify);
+BLEService              sensorService        = BLEService("19b10000e8f2537e4f6cd104768a1213");
 
+BLEService              sensorService2        = BLEService("19b10000e8f2537e4f6cd104768a1214");
+
+// create switch characteristic for pin A3
+BLECharCharacteristic   sensorCharacteristic = BLECharCharacteristic("19b10001e8f2537e4f6cd104768a1213", BLERead | BLENotify);
+BLECharCharacteristic   sensorCharacteristic2 = BLECharCharacteristic("19b10001e8f2537e4f6cd104768a1214", BLERead | BLENotify);
 void setup() {
 //  Serial.begin(115200);
   Serial.begin(9600);
@@ -47,14 +50,18 @@ void setup() {
 
    //set sensor pin
    pinMode(SENSOR_PIN, INPUT);
+   pinMode(SENSOR_PIN2, INPUT);
    
   // set advertised local name and service UUID
   blePeripheral.setLocalName("Sensor");
   blePeripheral.setAdvertisedServiceUuid(sensorService.uuid());
-
+  blePeripheral.setAdvertisedServiceUuid(sensorService2.uuid());
+  
   // add service and characteristic
   blePeripheral.addAttribute(sensorService);
+  blePeripheral.addAttribute(sensorService2);
   blePeripheral.addAttribute(sensorCharacteristic);
+  blePeripheral.addAttribute(sensorCharacteristic2);
 
   // assign event handlers for connected, disconnected to peripheral
   blePeripheral.setEventHandler(BLEConnected, blePeripheralConnectHandler);
@@ -63,6 +70,9 @@ void setup() {
   // assign event handlers for characteristic
   sensorCharacteristic.setEventHandler(BLESubscribed, characteristicSubscribed);
   sensorCharacteristic.setEventHandler(BLEUnsubscribed, characteristicUnsubscribed);
+
+  sensorCharacteristic2.setEventHandler(BLESubscribed, characteristicSubscribed);
+  sensorCharacteristic2.setEventHandler(BLEUnsubscribed, characteristicUnsubscribed);
 
   // begin initialization
   blePeripheral.begin();
@@ -82,10 +92,13 @@ void loop() {
   
     // read the analog input
    int analogValue = analogRead(SENSOR_PIN); 
+   int analogValue2 = analogRead(SENSOR_PIN2);
    //save it in the characteristic
     sensorCharacteristic.setValue(analogValue);
+    sensorCharacteristic2.setValue(analogValue2);
   
-   Serial.println(analogValue);
+   Serial.println("Analog1 " + analogValue);
+   Serial.println("Analog2 " + analogValue2);
  
  }
   
