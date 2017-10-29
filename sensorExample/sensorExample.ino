@@ -97,8 +97,8 @@ void loop() {
     sensorCharacteristic.setValue(analogValue);
     sensorCharacteristic2.setValue(analogValue2);
   
-   Serial.println("Analog1 " + analogValue);
-   Serial.println("Analog2 " + analogValue2);
+   Serial.println(analogValue);
+   Serial.println(analogValue2);
  
  }
   
