@@ -42,11 +42,10 @@ BLEService              sensorService         = BLEService("33332a58-0000-1000-8
 //BLEService              sensorService2        = BLEService("3032454c-426b-7261-5074-72616d536558");
 
 // create switch characteristic for pin A3
-// BLECharCharacteristic   sensorCharacteristic  = BLECharCharacteristic("19b10001e8f2537e4f6cd104768a1213", BLERead | BLENotify);
-//BLECharCharacteristic   sensorCharacteristic  = BLECharCharacteristic("00001525-1212-efde-1523-785feabcd123", BLERead | BLENotify);
 BLECharCharacteristic   sensorCharacteristic  = BLECharCharacteristic("33332a58-0000-1000-8000-00805f9b34fb", BLERead | BLENotify);
+
 // create switch characteristic for pin A4
-//BLECharCharacteristic   sensorCharacteristic2 = BLECharCharacteristic("00001525-1212-efde-1523-785feabcd124", BLERead | BLENotify);
+BLECharCharacteristic   sensorCharacteristic2 = BLECharCharacteristic("33332a58-0000-1000-8000-00805f9b34fc", BLERead | BLENotify);
 
 void setup() {
 //  Serial.begin(115200);
@@ -68,7 +67,7 @@ void setup() {
   blePeripheral.addAttribute(sensorService);
 //  blePeripheral.addAttribute(sensorService2);
   blePeripheral.addAttribute(sensorCharacteristic);
-//  blePeripheral.addAttribute(sensorCharacteristic2);
+  blePeripheral.addAttribute(sensorCharacteristic2);
 
   // assign event handlers for connected, disconnected to peripheral
   blePeripheral.setEventHandler(BLEConnected, blePeripheralConnectHandler);
@@ -78,8 +77,8 @@ void setup() {
   sensorCharacteristic.setEventHandler(BLESubscribed,   characteristicSubscribed);
   sensorCharacteristic.setEventHandler(BLEUnsubscribed, characteristicUnsubscribed);
 
-//  sensorCharacteristic2.setEventHandler(BLESubscribed,   characteristicSubscribed);
-//  sensorCharacteristic2.setEventHandler(BLEUnsubscribed, characteristicUnsubscribed);
+  sensorCharacteristic2.setEventHandler(BLESubscribed,   characteristicSubscribed);
+  sensorCharacteristic2.setEventHandler(BLEUnsubscribed, characteristicUnsubscribed);
 
   // begin initialization
   blePeripheral.begin();
@@ -102,12 +101,22 @@ void loop() {
     int analogValue2 = analogRead(SENSOR_PIN2);
     //save it in the characteristic
     sensorCharacteristic.setValue(analogValue);
-//    sensorCharacteristic.setValue('123');
     
-//    sensorCharacteristic2.setValue(analogValue2);
-
+    sensorCharacteristic2.setValue(analogValue2);
+    
+    Serial.println("Sensor 1");
+//946
     Serial.println(analogValue);
-//    Serial.println(analogValue2);
+  
+    // print it out in many formats:
+    Serial.println(analogValue);       // print as an ASCII-encoded decimal
+    Serial.print("DEC "); Serial.println(analogValue, DEC);  // print as an ASCII-encoded decimal
+    Serial.print("HEX "); Serial.println(analogValue, HEX);  // print as an ASCII-encoded hexadecimal
+    Serial.print("OCT "); Serial.println(analogValue, OCT);  // print as an ASCII-encoded octal
+    Serial.print("BIN "); Serial.println(analogValue, BIN);  // print as an ASCII-encoded binary
+
+    Serial.println("Sensor 2");
+    Serial.println("=================================================================================");
 
  }
 
