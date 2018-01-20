@@ -31,16 +31,23 @@ long previousMillis = 0;
 long interval = 100;
 
 // create peripheral instance, see pinouts above
-BLEPeripheral           blePeripheral        = BLEPeripheral(BLE_REQ, BLE_RDY, BLE_RST);
+BLEPeripheral           blePeripheral         = BLEPeripheral(BLE_REQ, BLE_RDY, BLE_RST);
 
 // service for pin A3
-BLEService              sensorService        = BLEService("19b10000e8f2537e4f6cd104768a1213");
+//Nordic LED Button Service
+//BLEService              sensorService         = BLEService("00001523-1212-efde-1523-785feabcd123");
+BLEService              sensorService         = BLEService("33332a58-0000-1000-8000-00805f9b34fb");
 
-BLEService              sensorService2        = BLEService("19b10000e8f2537e4f6cd104768a1214");
+// service for pin A4
+//BLEService              sensorService2        = BLEService("3032454c-426b-7261-5074-72616d536558");
 
 // create switch characteristic for pin A3
-BLECharCharacteristic   sensorCharacteristic  = BLECharCharacteristic("19b10001e8f2537e4f6cd104768a1213", BLERead | BLENotify);
-BLECharCharacteristic   sensorCharacteristic2 = BLECharCharacteristic("19b10001e8f2537e4f6cd104768a1214", BLERead | BLENotify);
+// BLECharCharacteristic   sensorCharacteristic  = BLECharCharacteristic("19b10001e8f2537e4f6cd104768a1213", BLERead | BLENotify);
+//BLECharCharacteristic   sensorCharacteristic  = BLECharCharacteristic("00001525-1212-efde-1523-785feabcd123", BLERead | BLENotify);
+BLECharCharacteristic   sensorCharacteristic  = BLECharCharacteristic("33332a58-0000-1000-8000-00805f9b34fb", BLERead | BLENotify);
+// create switch characteristic for pin A4
+//BLECharCharacteristic   sensorCharacteristic2 = BLECharCharacteristic("00001525-1212-efde-1523-785feabcd124", BLERead | BLENotify);
+
 void setup() {
 //  Serial.begin(115200);
   Serial.begin(9600);
@@ -55,13 +62,13 @@ void setup() {
   // set advertised local name and service UUID
   blePeripheral.setLocalName("Sensor");
   blePeripheral.setAdvertisedServiceUuid(sensorService.uuid());
-  blePeripheral.setAdvertisedServiceUuid(sensorService2.uuid());
+//  blePeripheral.setAdvertisedServiceUuid(sensorService2.uuid());
 
   // add service and characteristic
   blePeripheral.addAttribute(sensorService);
-  blePeripheral.addAttribute(sensorService2);
+//  blePeripheral.addAttribute(sensorService2);
   blePeripheral.addAttribute(sensorCharacteristic);
-  blePeripheral.addAttribute(sensorCharacteristic2);
+//  blePeripheral.addAttribute(sensorCharacteristic2);
 
   // assign event handlers for connected, disconnected to peripheral
   blePeripheral.setEventHandler(BLEConnected, blePeripheralConnectHandler);
@@ -71,8 +78,8 @@ void setup() {
   sensorCharacteristic.setEventHandler(BLESubscribed,   characteristicSubscribed);
   sensorCharacteristic.setEventHandler(BLEUnsubscribed, characteristicUnsubscribed);
 
-  sensorCharacteristic2.setEventHandler(BLESubscribed,   characteristicSubscribed);
-  sensorCharacteristic2.setEventHandler(BLEUnsubscribed, characteristicUnsubscribed);
+//  sensorCharacteristic2.setEventHandler(BLESubscribed,   characteristicSubscribed);
+//  sensorCharacteristic2.setEventHandler(BLEUnsubscribed, characteristicUnsubscribed);
 
   // begin initialization
   blePeripheral.begin();
@@ -86,19 +93,21 @@ void loop() {
 
   //timer function
   unsigned long currentMillis = millis();
- if(currentMillis - previousMillis > interval) {
-   // save the last time
+  if(currentMillis - previousMillis > interval) {
+    // save the last time
     previousMillis = currentMillis;
 
     // read the analog input
-   int analogValue = analogRead(SENSOR_PIN);
-   int analogValue2 = analogRead(SENSOR_PIN2);
-   //save it in the characteristic
+    int analogValue = analogRead(SENSOR_PIN);
+    int analogValue2 = analogRead(SENSOR_PIN2);
+    //save it in the characteristic
     sensorCharacteristic.setValue(analogValue);
-    sensorCharacteristic2.setValue(analogValue2);
+//    sensorCharacteristic.setValue('123');
+    
+//    sensorCharacteristic2.setValue(analogValue2);
 
-   Serial.println(analogValue);
-   Serial.println(analogValue2);
+    Serial.println(analogValue);
+//    Serial.println(analogValue2);
 
  }
 

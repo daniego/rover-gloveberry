@@ -1,3 +1,13 @@
+Hardware:
+---------
+ - BLE nano http://redbearlab.com/blenano/
+
+Requirements:
+-------------
+ - Arduino 1.6.9
+ - Add boards as described here https://github.com/redbearlab/nRF51822-Arduino/s
+
+
 Service:
   BLEService              sensorService2        = BLEService("19b10000e8f2537e4f6cd104768a1214");
 
