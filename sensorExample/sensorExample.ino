@@ -3,11 +3,11 @@
 /*
   Sensor reading
 
-  Uses Sandeep Mistry's BLE Peripheral library: https://github.com/sandeepmistry/arduino-BLEPeripheral/
-  to read data from a sensor.
+  Uses BLE Peripheral library: https://github.com/daniego/reover-gloveberry/
+  to read data from anologue sensors.
 
-  created 6 Feb 2015
-  by Maria Paula Saba
+  created 21 Jan 2018
+  by Daniel Floris
 */
 
 
@@ -15,31 +15,27 @@
 #include <SPI.h>
 #include <BLEPeripheral.h>
 //#include <BLE_API.h>
+
 // define pins (varies per shield/board, UNUSED for nRF51822)
 #define BLE_REQ   10
 #define BLE_RDY   2
 #define BLE_RST   9
 
 //define sensor pin
-//#define SENSOR_PIN 5
-#define SENSOR_PIN A3
+#define SENSOR_PIN  A3
 #define SENSOR_PIN2 A4
+
 //variable for a timer
 long previousMillis = 0;
 
  // interval at which we change (send) data (milliseconds)
-long interval = 100;
+long interval = 1000;
 
 // create peripheral instance, see pinouts above
 BLEPeripheral           blePeripheral         = BLEPeripheral(BLE_REQ, BLE_RDY, BLE_RST);
 
-// service for pin A3
-//Nordic LED Button Service
-//BLEService              sensorService         = BLEService("00001523-1212-efde-1523-785feabcd123");
+// service
 BLEService              sensorService         = BLEService("33332a58-0000-1000-8000-00805f9b34fb");
-
-// service for pin A4
-//BLEService              sensorService2        = BLEService("3032454c-426b-7261-5074-72616d536558");
 
 // create switch characteristic for pin A3
 BLECharCharacteristic   sensorCharacteristic  = BLECharCharacteristic("33332a58-0000-1000-8000-00805f9b34fb", BLERead | BLENotify);
@@ -61,11 +57,10 @@ void setup() {
   // set advertised local name and service UUID
   blePeripheral.setLocalName("Sensor");
   blePeripheral.setAdvertisedServiceUuid(sensorService.uuid());
-//  blePeripheral.setAdvertisedServiceUuid(sensorService2.uuid());
 
   // add service and characteristic
   blePeripheral.addAttribute(sensorService);
-//  blePeripheral.addAttribute(sensorService2);
+  
   blePeripheral.addAttribute(sensorCharacteristic);
   blePeripheral.addAttribute(sensorCharacteristic2);
 
@@ -99,23 +94,13 @@ void loop() {
     // read the analog input
     int analogValue = analogRead(SENSOR_PIN);
     int analogValue2 = analogRead(SENSOR_PIN2);
+    
     //save it in the characteristic
     sensorCharacteristic.setValue(analogValue);
-    
     sensorCharacteristic2.setValue(analogValue2);
-    
-    Serial.println("Sensor 1");
-//946
-    Serial.println(analogValue);
-  
-    // print it out in many formats:
-    Serial.println(analogValue);       // print as an ASCII-encoded decimal
-    Serial.print("DEC "); Serial.println(analogValue, DEC);  // print as an ASCII-encoded decimal
-    Serial.print("HEX "); Serial.println(analogValue, HEX);  // print as an ASCII-encoded hexadecimal
-    Serial.print("OCT "); Serial.println(analogValue, OCT);  // print as an ASCII-encoded octal
-    Serial.print("BIN "); Serial.println(analogValue, BIN);  // print as an ASCII-encoded binary
 
-    Serial.println("Sensor 2");
+    Serial.print("Sensor 1");Serial.println(analogValue); 
+    Serial.print("Sensor 2");Serial.println(analogValue2); 
     Serial.println("=================================================================================");
 
  }
