@@ -4,9 +4,9 @@ Hardware:
 
 Requirements:
 -------------
- - Arduino 1.6.9
- - Add boards as described here https://github.com/redbearlab/nRF51822-Arduino/s
-
+ - Arduino 1.6.12
+ - Add boards as described here https://github.com/redbearlab/nRF51822-Arduino/
+ - Add BLEPeripheral LIBRARIES as described here https://github.com/sandeepmistry/arduino-BLEPeripheral
 
 Service:
   BLEService              sensorService2        = BLEService("19b10000e8f2537e4f6cd104768a1214");
@@ -29,3 +29,8 @@ To:
 3032454c-426b-7261-5074-72616d536557
 3031454c-426b-7261-5074-72616d536557
 It also worked when we reduced the UUID's size from 32bits to 16bits, this means, the first four digits being zero 0000XXXX.
+
+
+Connections
+===========
+Initially refeer to https://github.com/redbear/nRF5x/tree/master/nRF52832 and https://github.com/RedBearLab/BLENano

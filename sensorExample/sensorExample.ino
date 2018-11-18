@@ -21,7 +21,7 @@
 #define BLE_RDY   2
 #define BLE_RST   9
 
-//define sensor pin
+//define sensor pin 
 #define SENSOR_PIN  A3
 #define SENSOR_PIN2 A4
 
@@ -29,19 +29,19 @@
 long previousMillis = 0;
 
  // interval at which we change (send) data (milliseconds)
-long interval = 1000;
+long interval = 500;
 
 // create peripheral instance, see pinouts above
 BLEPeripheral           blePeripheral         = BLEPeripheral(BLE_REQ, BLE_RDY, BLE_RST);
 
 // service
-BLEService              sensorService         = BLEService("33332a58-0000-1000-8000-00805f9b34fb");
+BLEService              sensorService         = BLEService("33332a58-0000-1000-8000-00805f9b34ff");
 
 // create switch characteristic for pin A3
-BLECharCharacteristic   sensorCharacteristic  = BLECharCharacteristic("33332a58-0000-1000-8000-00805f9b34fb", BLERead | BLENotify);
+BLECharCharacteristic   sensorCharacteristic  = BLECharCharacteristic("33332a58-0000-1000-8000-00805f9b34aa", BLERead | BLENotify);
 
 // create switch characteristic for pin A4
-BLECharCharacteristic   sensorCharacteristic2 = BLECharCharacteristic("33332a58-0000-1000-8000-00805f9b34fc", BLERead | BLENotify);
+BLECharCharacteristic   sensorCharacteristic2 = BLECharCharacteristic("33332a58-0000-1000-8000-00805f9b34bb", BLERead | BLENotify);
 
 void setup() {
 //  Serial.begin(115200);
@@ -99,8 +99,8 @@ void loop() {
     sensorCharacteristic.setValue(analogValue);
     sensorCharacteristic2.setValue(analogValue2);
 
-    Serial.print("Sensor 1");Serial.println(analogValue); 
-    Serial.print("Sensor 2");Serial.println(analogValue2); 
+    Serial.print("Sensor 1: ");Serial.println(analogValue); 
+    Serial.print("Sensor 2: ");Serial.println(analogValue2); 
     Serial.println("=================================================================================");
 
  }
